@@ -17,10 +17,12 @@ public final class AcademyCoin {
         int maxResult = 0;
         for (int i = 0; i < pricesArrLength - 1; i++) {
             for (int j = i + 1; j < pricesArrLength; j++) {
-                maxResult = Math.max(maxResult,
-                        pricesArr[j] - pricesArr[i] +
-                                maxProfit(Arrays.stream(
-                                        Arrays.copyOfRange(pricesArr, j + 1, pricesArrLength))));
+                int diff = pricesArr[j] - pricesArr[i];
+                if (diff > 0) {
+                    maxResult = Math.max(maxResult, diff +
+                            maxProfit(Arrays.stream(
+                                    Arrays.copyOfRange(pricesArr, j + 1, pricesArrLength))));
+                }
             }
         }
         return maxResult;
