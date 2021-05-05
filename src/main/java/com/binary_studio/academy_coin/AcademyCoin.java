@@ -1,7 +1,6 @@
 package com.binary_studio.academy_coin;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public final class AcademyCoin {
@@ -10,16 +9,18 @@ public final class AcademyCoin {
     }
 
     public static int maxProfit(Stream<Integer> prices) {
-        List<Integer> pricesList = prices.collect(Collectors.toList());
-        if (pricesList.size() == 0) {
+        Integer[] pricesArr = prices.toArray(Integer[]::new);
+        int pricesArrLength = pricesArr.length;
+        if (pricesArrLength == 0) {
             return 0;
         }
         int maxResult = 0;
-        for (int i = 0; i < pricesList.size() - 1; i++) {
-            for (int j = i + 1; j < pricesList.size(); j++) {
+        for (int i = 0; i < pricesArrLength - 1; i++) {
+            for (int j = i + 1; j < pricesArrLength; j++) {
                 maxResult = Math.max(maxResult,
-                        pricesList.get(j) - pricesList.get(i) +
-                                maxProfit(pricesList.subList(j + 1, pricesList.size()).stream()));
+                        pricesArr[j] - pricesArr[i] +
+                                maxProfit(Arrays.stream(
+                                        Arrays.copyOfRange(pricesArr, j + 1, pricesArrLength))));
             }
         }
         return maxResult;
