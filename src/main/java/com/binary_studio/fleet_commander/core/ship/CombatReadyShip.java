@@ -124,27 +124,14 @@ public final class CombatReadyShip implements CombatReadyVessel {
 
 		this.actualCapacitorAmount = PositiveInteger
 				.of(this.actualCapacitorAmount.value() - this.defenciveSubsystem.getCapacitorConsumption().value());
-		PositiveInteger resultShieldRegenerated = PositiveInteger.of(0);
-		PositiveInteger currentShieldRegenerated = this.defenciveSubsystem.regenerate().shieldHPRegenerated;
-		if (this.actualShieldHP.value() < this.initShieldHP.value()) {
-			if (this.initShieldHP.value() - this.actualShieldHP.value() < currentShieldRegenerated.value()) {
-				resultShieldRegenerated = PositiveInteger.of(this.initShieldHP.value() - this.actualShieldHP.value());
-			}
-			else {
-				resultShieldRegenerated = currentShieldRegenerated;
-			}
-		}
 
-		PositiveInteger resultHullRegenerated = PositiveInteger.of(0);
+		PositiveInteger currentShieldRegenerated = this.defenciveSubsystem.regenerate().shieldHPRegenerated;
+		PositiveInteger resultShieldRegenerated = PositiveInteger.of(
+				Math.min(this.initShieldHP.value() - this.actualShieldHP.value(), currentShieldRegenerated.value()));
+
 		PositiveInteger currentHullRegenerated = this.defenciveSubsystem.regenerate().hullHPRegenerated;
-		if (this.actualHullHP.value() < this.initHullHP.value()) {
-			if (this.initHullHP.value() - this.actualHullHP.value() < currentHullRegenerated.value()) {
-				resultHullRegenerated = PositiveInteger.of(this.initHullHP.value() - this.actualHullHP.value());
-			}
-			else {
-				resultHullRegenerated = currentHullRegenerated;
-			}
-		}
+		PositiveInteger resultHullRegenerated = PositiveInteger
+				.of(Math.min(this.initHullHP.value() - this.actualHullHP.value(), currentHullRegenerated.value()));
 
 		RegenerateAction regenerateAction = new RegenerateAction(resultShieldRegenerated, resultHullRegenerated);
 		return Optional.of(regenerateAction);
